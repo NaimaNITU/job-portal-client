@@ -1,11 +1,134 @@
-import React from "react";
+import React, { useContext } from "react";
+import { FaChevronDown } from "react-icons/fa";
+import { NavLink } from "react-router";
+import { AuthContext } from "../../context/authContext/AuthContext";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
+  const { user, userSignOut } = useContext(AuthContext);
+
+  const handleSignOut = () => {
+    userSignOut()
+      .then(() => {
+        Swal.fire("You signed out!");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const links = (
+    <>
+      <li>
+        <NavLink
+          to="/"
+          className="hover:text-blue-600 flex items-center gap-1 group"
+        >
+          Home
+          <FaChevronDown className="text-[10px] text-gray-400 group-hover:text-blue-600" />
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/jobs"
+          className="hover:text-blue-600 flex items-center gap-1 group"
+        >
+          Find a Job
+          <FaChevronDown className="text-[10px] text-gray-400 group-hover:text-blue-600" />
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/recruiters"
+          className="hover:text-blue-600 flex items-center gap-1 group"
+        >
+          Recruiters
+          <FaChevronDown className="text-[10px] text-gray-400 group-hover:text-blue-600" />
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/candidates"
+          className="hover:text-blue-600 flex items-center gap-1 group"
+        >
+          Candidates
+          <FaChevronDown className="text-[10px] text-gray-400 group-hover:text-blue-600" />
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/pages"
+          className="hover:text-blue-600 flex items-center gap-1 group"
+        >
+          Pages
+          <FaChevronDown className="text-[10px] text-gray-400 group-hover:text-blue-600" />
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/blog"
+          className="hover:text-blue-600 flex items-center gap-1 group"
+        >
+          Blog
+          <FaChevronDown className="text-[10px] text-gray-400 group-hover:text-blue-600" />
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/dashboard"
+          className="border border-dashed border-blue-500 rounded px-3 py-1 text-blue-600 hover:bg-blue-50"
+        >
+          Dashboard
+        </NavLink>
+      </li>
+    </>
+  );
+
   return (
-    <div className="navbar bg-base-100 shadow-sm">
+    <div className="navbar bg-white px-6 shadow-sm">
+      {/* Logo */}
       <div className="navbar-start">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+        <NavLink
+          to="/"
+          className="text-2xl font-bold flex items-center gap-2 text-blue-800"
+        >
+          <div className="w-5 h-5 bg-blue-500 rotate-45" />
+          Job<span className="text-blue-600">Box</span>
+        </NavLink>
+      </div>
+
+      {/* Desktop Menu */}
+      <div className="navbar-center hidden lg:flex">
+        <ul className="menu menu-horizontal px-1 gap-2">{links}</ul>
+      </div>
+
+      {/* Desktop Auth Buttons */}
+      <div className="navbar-end hidden lg:flex gap-3">
+        {user ? (
+          <button
+            onClick={handleSignOut}
+            className="btn bg-blue-600 text-white hover:bg-blue-700 px-6 rounded-md"
+          >
+            Sign Out
+          </button>
+        ) : (
+          <>
+            <NavLink to="/register" className="text-blue-700 underline">
+              Register
+            </NavLink>
+            <NavLink
+              to="/signin"
+              className="btn bg-blue-600 text-white hover:bg-blue-700 px-6 rounded-md"
+            >
+              Sign in
+            </NavLink>
+          </>
+        )}
+      </div>
+
+      {/* Mobile Menu */}
+      <div className="navbar-end lg:hidden">
+        <div className="dropdown dropdown-end">
+          <label tabIndex={0} className="btn btn-ghost">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -13,72 +136,47 @@ const Navbar = () => {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              {" "}
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h7"
-              />{" "}
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
-          </div>
+          </label>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-white rounded-box w-52"
           >
-            <li>
-              <a>Homepage</a>
-            </li>
-            <li>
-              <a>Portfolio</a>
-            </li>
-            <li>
-              <a>About</a>
-            </li>
+            {links}
+            <div className="mt-2 border-t pt-2">
+              {user ? (
+                <button
+                  onClick={handleSignOut}
+                  className="text-blue-700 underline"
+                >
+                  Sign Out
+                </button>
+              ) : (
+                <>
+                  <li>
+                    <NavLink to="/register" className="text-blue-700 underline">
+                      Register
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/signin"
+                      className="btn bg-blue-600 text-white hover:bg-blue-700 w-full"
+                    >
+                      Sign in
+                    </NavLink>
+                  </li>
+                </>
+              )}
+            </div>
           </ul>
         </div>
-      </div>
-      <div className="navbar-center">
-        <a className="btn btn-ghost text-xl">daisyUI</a>
-      </div>
-      <div className="navbar-end">
-        <button className="btn btn-ghost btn-circle">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            {" "}
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />{" "}
-          </svg>
-        </button>
-        <button className="btn btn-ghost btn-circle">
-          <div className="indicator">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              {" "}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-              />{" "}
-            </svg>
-            <span className="badge badge-xs badge-primary indicator-item"></span>
-          </div>
-        </button>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import lottieSignIn from "../../assets/lotties/signIn.json";
 import { AuthContext } from "../../context/authContext/AuthContext";
 
 const SignIn = () => {
-  const { signInUser } = use(AuthContext);
+  const { signInUser, signInWithGoogle } = use(AuthContext);
   const handleSignIn = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -22,6 +22,18 @@ const SignIn = () => {
       });
   };
 
+  //handle google sign in
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.log(errorMessage);
+      });
+  };
   return (
     <div className="relative my-10 flex items-center justify-center bg-white px-4">
       {/* Form + Lottie Grid */}
@@ -37,7 +49,10 @@ const SignIn = () => {
           </p>
 
           {/* Google Sign In */}
-          <button className="btn w-full border text-gray-700 mb-4">
+          <button
+            onClick={handleGoogleSignIn}
+            className="btn w-full border text-gray-700 mb-4"
+          >
             <img
               src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
               alt="Google"

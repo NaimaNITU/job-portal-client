@@ -1,10 +1,11 @@
-import React, { use } from "react";
+import React, { useContext } from "react";
 import Lottie from "lottie-react";
 import lottieRegister from "../../assets/lotties/register.json";
 import { AuthContext } from "../../context/authContext/AuthContext";
 
 const Register = () => {
-  const { createUser } = use(AuthContext);
+  const { createUser, signInWithGoogle } = useContext(AuthContext);
+
   const handleRegister = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -12,7 +13,6 @@ const Register = () => {
     const data = Object.fromEntries(formData);
     console.log(data);
 
-    //now create user in firebase for registration or sign up
     createUser(data.email, data.password)
       .then((result) => {
         console.log("result", result);
@@ -22,9 +22,21 @@ const Register = () => {
       });
   };
 
+  //here google sign up
+  const handleGoogleSignUp = () => {
+    signInWithGoogle()
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.log(errorMessage);
+      });
+  };
+
   return (
     <div className="relative my-10 flex items-center justify-center bg-white px-4">
-      {/* Registration Form in the Center */}
       <div className="max-w-lg w-full">
         <h4 className="text-blue-600 font-medium mb-2">Register</h4>
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-1">
@@ -34,8 +46,10 @@ const Register = () => {
           Access to all features. No credit card required.
         </p>
 
-        {/* Google Sign Up Button */}
-        <button className="btn w-full border text-gray-700 mb-4">
+        <button
+          onClick={handleGoogleSignUp}
+          className="btn w-full border text-gray-700 mb-4"
+        >
           <img
             src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
             alt="Google"
@@ -44,27 +58,23 @@ const Register = () => {
           Sign up with Google
         </button>
 
-        {/* Divider */}
         <div className="flex items-center gap-2 mb-6">
           <div className="flex-grow h-px bg-gray-300" />
           <span className="text-sm text-gray-500">or continue with</span>
           <div className="flex-grow h-px bg-gray-300" />
         </div>
 
-        {/* Form Fields */}
         <form onSubmit={handleRegister} className="space-y-4">
           <input
             type="text"
             placeholder="Full Name *"
             className="input input-bordered w-full"
-            // defaultValue="user name"
             name="name"
           />
           <input
             type="email"
             placeholder="Email *"
             className="input input-bordered w-full"
-            // defaultValue="stevenjob@gmail.com"
             name="email"
             required
           />
@@ -72,14 +82,12 @@ const Register = () => {
             type="text"
             placeholder="Username *"
             className="input input-bordered w-full"
-            // defaultValue="stevenjob"
             name="username"
           />
           <input
             type="password"
             placeholder="Password *"
             className="input input-bordered w-full"
-            // defaultValue="***********"
             name="password"
             required
           />
@@ -87,11 +95,9 @@ const Register = () => {
             type="password"
             placeholder="Re-Password *"
             className="input input-bordered w-full"
-            // defaultValue="***********"
             name="re-password"
           />
 
-          {/* Terms & Policy */}
           <div className="flex items-center gap-2 text-sm">
             <input type="checkbox" className="checkbox checkbox-sm" />
             <span>
@@ -102,14 +108,12 @@ const Register = () => {
             </span>
           </div>
 
-          {/* Submit Button */}
           <button className="btn w-full mt-2 bg-blue-900 text-white hover:bg-blue-800">
             Submit & Register
           </button>
         </form>
       </div>
 
-      {/* Right: Lottie Animation */}
       <div className="hidden md:block absolute right-5 top-1/2 transform -translate-y-1/2">
         <Lottie
           animationData={lottieRegister}

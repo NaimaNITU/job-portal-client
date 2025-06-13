@@ -34,7 +34,7 @@ const AuthProvider = ({ children }) => {
   };
 
   //sign in with google
-  const signInWithGoogle = () => {
+  const googleAuthentication = () => {
     setLoading(true);
     return signInWithPopup(auth, provider);
   };
@@ -54,7 +54,7 @@ const AuthProvider = ({ children }) => {
     createUser,
     signInUser,
     userSignOut,
-    signInWithGoogle,
+    googleAuthentication,
   };
   return <AuthContext value={authInfo}>{children}</AuthContext>;
 };
